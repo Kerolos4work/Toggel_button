@@ -6,30 +6,7 @@
 		<title>Document</title>
 	</head>
 	<body>
-		<style>
-:root {
-  --main-color: #4CAF50;
-  --border-radius: 8px;
-}
-
-.toggle-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  width: 100%;
-  border: 2px solid #ddd;
-  border-radius: var(--border-radius);
-  background: #ddd;
-  overflow: hidden;
-}
-
-/* باقي الـ CSS كما هو في الإصدار السابق */
-</style>
-
-<div class="toggle-wrapper" id="buttonContainer"></div>
-<input type="hidden" id="selectedValue" name="selectedValue">
-
-<script>
+		<script>
 // التهيئة الأساسية
 const defaultConfig = {
   options: ["For rent", "For sale", "Direct color"],
@@ -71,6 +48,6 @@ window.JotForm && JotForm.initializeWidget({
 function updateDesign(settings) {
   // تحديث التصميم بناء على الإعدادات
 }
-</script>
+		</script> 
 	</body>
 </html>
