@@ -130,22 +130,6 @@
 		</div>
 
 		<script type="text/javascript">
-			options = ['123', '234', '564']
-
-			const btn = document.getElementById('buttonContainer')
-			btn.innerHTML = ''
-			options.forEach((option) => {
-				btn.innerHTML += `<div class="toggle-segment">
-					<input
-					type="radio"
-					name="toggleGroup"
-					id="${option}"
-					value="${option}"
-					/>
-					<label for="${option}">${option}</label>
-					</div>`
-			})
-
 			getValue()
 			// Update hidden input when radio changes
 			function getValue() {
@@ -173,18 +157,18 @@
 
 				document.documentElement.style.setProperty('--main-color', color)
 
-				const btn = document.getElementById('buttonContainer').innerHTML
+				const btn = document.getElementById('buttonContainer')
 				btn.innerHTML = ''
 				options.forEach((option) => {
-					btn += `<div class="toggle-segment">
-				<input
-					type="radio"
-					name="toggleGroup"
-					id="${option}"
-					value="${option}"
-				/>
-				<label for="${option}">${option}</label>
-			</div>`
+					btn.innerHTML += `<div class="toggle-segment">
+						<input
+						type="radio"
+						name="toggleGroup"
+						id="${option}"
+						value="${option}"
+						/>
+						<label for="${option}">${option}</label>
+						</div>`
 				})
 
 				//subscribe to form submit event
