@@ -137,12 +137,12 @@
 				document.documentElement.style.setProperty('--main-color', color)
 
 				const btn = document.getElementById('buttonContainer')
+				console.log(btn)
 				btn.innerHTML = ''
 				var checked = ''
 				if (defaultValue == option) checked = 'checked'
 				options.forEach((option) => {
-					btn.innerHTML += `
-						<input
+					btn.innerHTML += `<input
 						type="radio"
 						name="toggleGroup"
 						id="${option}"
