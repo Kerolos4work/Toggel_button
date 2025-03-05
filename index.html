@@ -140,8 +140,9 @@
 				console.log(btn)
 				btn.innerHTML = ''
 				var checked = ''
-				if (defaultValue == option) checked = 'checked'
 				options.forEach((option) => {
+					if (defaultValue == option) checked = 'checked'
+					else checked = ''
 					btn.innerHTML += `<input
 						type="radio"
 						name="toggleGroup"
