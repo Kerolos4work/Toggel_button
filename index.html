@@ -156,13 +156,15 @@
 			})
 
 			function getValue() {
+				var returnValue = ''
 				document
 					.querySelectorAll('input[name="toggleGroup"]')
 					.forEach((radio) => {
 						if (radio.checked) {
-							return radio.value
+							returnValue = radio.value
 						}
 					})
+				return returnValue
 			}
 		</script>
 	</body>
