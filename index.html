@@ -7,128 +7,112 @@
 		<style>
 			:root {
 				--main-color: #4caf50;
+				--secondary-color: #bbb;
 				--border-radius: 8px;
 			}
 
-			.toggle-wrapper {
-				display: flex;
-				flex-direction: column;
-				gap: 2px;
-				width: 100%;
-				border: 2px solid #ddd;
-				border-radius: var(--border-radius);
-				background: #ddd;
-				overflow: hidden;
-			}
-
-			.toggle-segment {
-				flex: 1;
-				position: relative;
-			}
-
-			.toggle-segment input {
-				position: absolute;
-				opacity: 0;
-				width: 0;
-				height: 0;
-			}
-
-			.toggle-segment label {
-				display: block;
-				padding: 15px 20px;
-				background: #f8f8f8;
-				cursor: pointer;
-				transition: all 0.3s ease;
-				color: #666;
-				font-family: Arial, sans-serif;
-				font-weight: bold;
-				text-align: center;
-				border: 2px solid transparent;
-			}
-
-			.toggle-segment input:checked + label {
-				background: var(--main-color);
-				color: white;
-				border-color: var(--main-color);
-				z-index: 2;
+			.main {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				direction: rtl;
 			}
 
 			/* Desktop Horizontal Layout */
 			@media (min-width: 426px) {
 				.toggle-wrapper {
-					flex-direction: row;
-					gap: 0;
+					flex-wrap: nowrap;
 				}
-
-				.toggle-segment label {
-					border-radius: 0;
-					border-right: 2px solid #ddd;
+				label {
+					border-right-color: transparent !important;
 				}
-
-				.toggle-segment:first-child label {
-					border-radius: var(--border-radius) 0 0 var(--border-radius);
+				label:first-of-type {
+					border-radius: 0 25px 25px 0;
+					border-right-color: var(--secondary-color) !important;
 				}
-
-				.toggle-segment:last-child label {
-					border-radius: 0 var(--border-radius) var(--border-radius) 0;
-					border-right: none;
+				label:last-of-type {
+					border-radius: 25px 0 0 25px;
 				}
 			}
 
 			/* Mobile Vertical Layout */
 			@media (max-width: 425px) {
-				.toggle-segment label {
-					border-bottom: 2px solid #ddd;
+				.toggle-wrapper {
+					flex-wrap: wrap;
 				}
-
-				.toggle-segment:last-child label {
-					border-bottom: none;
+				label {
+					border-top-color: transparent !important;
+					padding: 16px 16px !important;
+				}
+				label:first-of-type {
+					border-radius: 25px 25px 0 0;
+					border-top-color: var(--secondary-color) !important;
+				}
+				label:last-of-type {
+					border-radius: 0 0 25px 25px;
 				}
 			}
+			.toggle-wrapper {
+				display: flex;
+			}
+			input[type='radio'] {
+				visibility: hidden;
+				height: 0;
+				width: 0;
+				margin: 0;
+			}
+			label {
+				border: solid 1px var(--secondary-color);
+				vertical-align: middle;
+				text-align: center;
+				cursor: pointer;
+				background-color: #fff;
+				color: #737373;
+				padding: 8px 16px;
+				flex-grow: 1;
+				place-content: center;
+			}
+			input[type='radio']:checked + label {
+				background-color: hsl(from var(--main-color) h s calc(l * 1.9));
+				border: solid 1px var(--main-color);
+				color: var(--main-color);
+				font-weight: bold;
+			}
 		</style>
-
-		<div class="toggle-wrapper" id="buttonContainer">
-			<div class="toggle-segment">
+		<div class="main">
+			<div class="q">gkjudfhgk</div>
+			<div class="toggle-wrapper" id="buttonContainer">
 				<input
 					type="radio"
 					name="toggleGroup"
 					id="option1"
 					value="for_rent"
 				/>
-				<label for="option1">For rent</label>
-			</div>
-			<div class="toggle-segment">
+				<label for="option1">Option 1</label>
 				<input
 					type="radio"
 					name="toggleGroup"
 					id="option2"
 					value="for_sale"
 				/>
-				<label for="option2">For sale</label>
-			</div>
-			<div class="toggle-segment">
+				<label for="option2"
+					>Optionghghghghg fdgh jfgh kjfdhg kljfhdg kljfd hgkljfh g
+					klfjhklgjfh gkjfdgh lkhghghgh gfhg hgf hfg 2</label
+				>
 				<input
 					type="radio"
 					name="toggleGroup"
 					id="option3"
 					value="direct_color"
 				/>
-				<label for="option3">Direct color</label>
+				<label for="option3">Option 3</label>
 			</div>
+			<input
+				type="hidden"
+				id="selectedValue"
+				name="selectedValue"
+				value="for_rent"
+			/>
 		</div>
-		<input
-			type="hidden"
-			id="selectedValue"
-			name="selectedValue"
-			value="for_rent"
-		/>
-
-		<div id="main">
-			<h3>This is my first widget.</h3>
-			<span id="labelText"></span>
-			<input type="text" id="userInput" />
-		</div>
-
 		<script type="text/javascript">
 			getValue()
 			// Update hidden input when radio changes
@@ -152,6 +136,7 @@
 				var label = JFCustomWidget.getWidgetSetting('QuestionLabel')
 				var color = JFCustomWidget.getWidgetSetting('color')
 				var options = JFCustomWidget.getWidgetSetting('options').split('\n')
+				var defaultValue = JFCustomWidget.getWidgetSetting('defaultValue')
 
 				document.getElementById('labelText').innerHTML = label
 
@@ -159,16 +144,18 @@
 
 				const btn = document.getElementById('buttonContainer')
 				btn.innerHTML = ''
+				var checked = ''
+				if (defaultValue == option) checked = 'checked'
 				options.forEach((option) => {
-					btn.innerHTML += `<div class="toggle-segment">
+					btn.innerHTML += `
 						<input
 						type="radio"
 						name="toggleGroup"
 						id="${option}"
 						value="${option}"
-						/>
-						<label for="${option}">${option}</label>
-						</div>`
+						class="toggle-segment"
+						${checked}/>
+						<label for="${option}">${option}</label>`
 				})
 
 				//subscribe to form submit event
