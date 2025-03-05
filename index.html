@@ -130,23 +130,56 @@
 		</div>
 
 		<script type="text/javascript">
+			getValue()
+			// Update hidden input when radio changes
+			function getValue() {
+				document
+					.querySelectorAll('input[name="toggleGroup"]')
+					.forEach((radio) => {
+						radio.addEventListener('change', () => {
+							if (radio.checked) {
+								document.getElementById('selectedValue').value =
+									radio.value
+								const value = radio.vlaue
+							}
+						})
+					})
+				return value
+			}
+
 			//always subscribe to ready event and implement widget related code
 			//inside callback function , it is the best practice while developing widgets
 			JFCustomWidget.subscribe('ready', function () {
 				var label = JFCustomWidget.getWidgetSetting('QuestionLabel')
 				var color = JFCustomWidget.getWidgetSetting('color')
 				var options = JFCustomWidget.getWidgetSetting('options').split('\n')
-				console.log(options)
+				console.log(document.getElementById)
 
 				document.getElementById('labelText').innerHTML = label
+
 				document.documentElement.style.setProperty('--main-color', color)
+
+				const btn = document.getElementById('buttonContainer').innerHTML
+				btn.innerHTML = ''
+				forEach((option) => {
+					btn += `<div class="toggle-segment">
+				<input
+					type="radio"
+					name="toggleGroup"
+					id="${option}"
+					value="${option}"
+				/>
+				<label for="${option}">${option}</label>
+			</div>`
+				})
+
 				//subscribe to form submit event
 				JFCustomWidget.subscribe('submit', function () {
 					var msg = {
 						//you should valid attribute to data for JotForm
 						//to be able to use youw widget as required
 						valid: true,
-						value: document.getElementById('userInput').value,
+						value: getValue(),
 					}
 					// send value to JotForm
 					JFCustomWidget.sendSubmit(msg)
