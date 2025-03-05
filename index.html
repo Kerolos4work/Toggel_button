@@ -130,6 +130,22 @@
 		</div>
 
 		<script type="text/javascript">
+			options = ['123', '234', '564']
+
+			const btn = document.getElementById('buttonContainer')
+			btn.innerHTML = ''
+			options.forEach((option) => {
+				btn.innerHTML += `<div class="toggle-segment">
+					<input
+					type="radio"
+					name="toggleGroup"
+					id="${option}"
+					value="${option}"
+					/>
+					<label for="${option}">${option}</label>
+					</div>`
+			})
+
 			getValue()
 			// Update hidden input when radio changes
 			function getValue() {
@@ -140,11 +156,10 @@
 							if (radio.checked) {
 								document.getElementById('selectedValue').value =
 									radio.value
-								const value = radio.vlaue
+								return radio.vlaue
 							}
 						})
 					})
-				return value
 			}
 
 			//always subscribe to ready event and implement widget related code
@@ -153,7 +168,6 @@
 				var label = JFCustomWidget.getWidgetSetting('QuestionLabel')
 				var color = JFCustomWidget.getWidgetSetting('color')
 				var options = JFCustomWidget.getWidgetSetting('options').split('\n')
-				console.log(document.getElementById)
 
 				document.getElementById('labelText').innerHTML = label
 
