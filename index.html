@@ -1,32 +1,157 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
-    </head>
-    <body>
-        <div id="main">
-            <h3>This is my first widget.</h3>
-            <span id="labelText"></span>
-            <input type="text" id="userInput">
-        </div>
-        <script type="text/javascript">
-            //always subscribe to ready event and implement widget related code
-            //inside callback function , it is the best practice while developing widgets
-            JFCustomWidget.subscribe("ready", function(){
-                var label = JFCustomWidget.getWidgetSetting('QuestionLabel');
-                document.getElementById('labelText').innerHTML = label;
-                //subscribe to form submit event
-                JFCustomWidget.subscribe("submit", function(){
-                    var msg = {
-                        //you should valid attribute to data for JotForm
-                        //to be able to use youw widget as required
-                        valid: true,
-                        value: document.getElementById('userInput').value
-                    }
-                    // send value to JotForm
-                    JFCustomWidget.sendSubmit(msg);
-                });
-            });
-        </script>
-    </body>
+	<head>
+		<script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
+	</head>
+	<body>
+		<style>
+			:root {
+				--main-color: #4caf50;
+				--border-radius: 8px;
+			}
+
+			.toggle-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 2px;
+				width: 100%;
+				border: 2px solid #ddd;
+				border-radius: var(--border-radius);
+				background: #ddd;
+				overflow: hidden;
+			}
+
+			.toggle-segment {
+				flex: 1;
+				position: relative;
+			}
+
+			.toggle-segment input {
+				position: absolute;
+				opacity: 0;
+				width: 0;
+				height: 0;
+			}
+
+			.toggle-segment label {
+				display: block;
+				padding: 15px 20px;
+				background: #f8f8f8;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				color: #666;
+				font-family: Arial, sans-serif;
+				font-weight: bold;
+				text-align: center;
+				border: 2px solid transparent;
+			}
+
+			.toggle-segment input:checked + label {
+				background: var(--main-color);
+				color: white;
+				border-color: var(--main-color);
+				z-index: 2;
+			}
+
+			/* Desktop Horizontal Layout */
+			@media (min-width: 426px) {
+				.toggle-wrapper {
+					flex-direction: row;
+					gap: 0;
+				}
+
+				.toggle-segment label {
+					border-radius: 0;
+					border-right: 2px solid #ddd;
+				}
+
+				.toggle-segment:first-child label {
+					border-radius: var(--border-radius) 0 0 var(--border-radius);
+				}
+
+				.toggle-segment:last-child label {
+					border-radius: 0 var(--border-radius) var(--border-radius) 0;
+					border-right: none;
+				}
+			}
+
+			/* Mobile Vertical Layout */
+			@media (max-width: 425px) {
+				.toggle-segment label {
+					border-bottom: 2px solid #ddd;
+				}
+
+				.toggle-segment:last-child label {
+					border-bottom: none;
+				}
+			}
+		</style>
+
+		<div class="toggle-wrapper" id="buttonContainer">
+			<div class="toggle-segment">
+				<input
+					type="radio"
+					name="toggleGroup"
+					id="option1"
+					value="for_rent"
+				/>
+				<label for="option1">For rent</label>
+			</div>
+			<div class="toggle-segment">
+				<input
+					type="radio"
+					name="toggleGroup"
+					id="option2"
+					value="for_sale"
+				/>
+				<label for="option2">For sale</label>
+			</div>
+			<div class="toggle-segment">
+				<input
+					type="radio"
+					name="toggleGroup"
+					id="option3"
+					value="direct_color"
+				/>
+				<label for="option3">Direct color</label>
+			</div>
+		</div>
+		<input
+			type="hidden"
+			id="selectedValue"
+			name="selectedValue"
+			value="for_rent"
+		/>
+
+		<div id="main">
+			<h3>This is my first widget.</h3>
+			<span id="labelText"></span>
+			<input type="text" id="userInput" />
+		</div>
+
+		<script type="text/javascript">
+			//always subscribe to ready event and implement widget related code
+			//inside callback function , it is the best practice while developing widgets
+			JFCustomWidget.subscribe('ready', function () {
+				var label = JFCustomWidget.getWidgetSetting('QuestionLabel')
+				var color = JFCustomWidget.getWidgetSetting('color')
+				var options = JFCustomWidget.getWidgetSetting('options').split('\n')
+				console.log(options)
+
+				document.getElementById('labelText').innerHTML = label
+				document.documentElement.style.setProperty('--main-color', color)
+				//subscribe to form submit event
+				JFCustomWidget.subscribe('submit', function () {
+					var msg = {
+						//you should valid attribute to data for JotForm
+						//to be able to use youw widget as required
+						valid: true,
+						value: document.getElementById('userInput').value,
+					}
+					// send value to JotForm
+					JFCustomWidget.sendSubmit(msg)
+				})
+			})
+		</script>
+	</body>
 </html>
