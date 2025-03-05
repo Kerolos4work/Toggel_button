@@ -80,7 +80,13 @@
 			<label for="option1">Option 1</label>
 			<input type="radio" name="toggleGroup" id="option2" value="2" />
 			<label for="option2">Option 2</label>
-			<input type="radio" name="toggleGroup" id="option3" value="3" />
+			<input
+				type="radio"
+				name="toggleGroup"
+				id="option3"
+				value="3"
+				checked
+			/>
 			<label for="option3">Option 3</label>
 		</div>
 		<input
@@ -90,9 +96,9 @@
 			value="for_rent"
 		/>
 		<script type="text/javascript">
-			getValue()
+			updateValue()
 			// Update hidden input when radio changes
-			function getValue() {
+			function updateValue() {
 				document
 					.querySelectorAll('input[name="toggleGroup"]')
 					.forEach((radio) => {
@@ -100,7 +106,6 @@
 							if (radio.checked) {
 								document.getElementById('selectedValue').value =
 									radio.value
-								return radio.vlaue
 							}
 						})
 					})
@@ -137,7 +142,6 @@
 
 				//subscribe to form submit event
 				JFCustomWidget.subscribe('submit', function () {
-					console.log(getValue())
 					var msg = {
 						//you should valid attribute to data for JotForm
 						//to be able to use youw widget as required
@@ -148,6 +152,17 @@
 					JFCustomWidget.sendSubmit(msg)
 				})
 			})
+
+			function getValue() {
+				document
+					.querySelectorAll('input[name="toggleGroup"]')
+					.forEach((radio) => {
+						if (radio.checked) {
+							console.log(radio.value)
+							return radio.value
+						}
+					})
+			}
 		</script>
 	</body>
 </html>
