@@ -9,11 +9,6 @@
 				--main-color: #4caf50;
 				--secondary-color: #bbb;
 				--border-radius: 8px;
-			}
-
-			.main {
-				display: grid;
-				grid-template-columns: repeat(2, 1fr);
 				direction: rtl;
 			}
 
@@ -37,7 +32,8 @@
 			/* Mobile Vertical Layout */
 			@media (max-width: 425px) {
 				.toggle-wrapper {
-					flex-wrap: wrap;
+					/* flex-wrap: wrap; */
+					flex-direction: column;
 				}
 				label {
 					border-top-color: transparent !important;
@@ -72,44 +68,31 @@
 				place-content: center;
 			}
 			input[type='radio']:checked + label {
-				background-color: hsl(from var(--main-color) h s calc(l * 1.9));
+				background-color: hsl(from var(--main-color) h s 95%);
 				border: solid 1px var(--main-color);
 				color: var(--main-color);
 				font-weight: bold;
 			}
 		</style>
-		<div class="main">
-			<div class="q">gkjudfhgk</div>
-			<div class="toggle-wrapper" id="buttonContainer">
-				<input
-					type="radio"
-					name="toggleGroup"
-					id="option1"
-					value="for_rent"
-				/>
-				<label for="option1">Option 1</label>
-				<input
-					type="radio"
-					name="toggleGroup"
-					id="option2"
-					value="for_sale"
-				/>
-				<label for="option2">Option 2</label>
-				<input
-					type="radio"
-					name="toggleGroup"
-					id="option3"
-					value="direct_color"
-				/>
-				<label for="option3">Option 3</label>
-			</div>
+		<div class="toggle-wrapper" id="buttonContainer">
+			<input type="radio" name="toggleGroup" id="option1" value="for_rent" />
+			<label for="option1">1</label>
+			<input type="radio" name="toggleGroup" id="option2" value="for_sale" />
+			<label for="option2">2</label>
 			<input
-				type="hidden"
-				id="selectedValue"
-				name="selectedValue"
-				value="for_rent"
+				type="radio"
+				name="toggleGroup"
+				id="option3"
+				value="direct_color"
 			/>
+			<label for="option3">3</label>
 		</div>
+		<input
+			type="hidden"
+			id="selectedValue"
+			name="selectedValue"
+			value="for_rent"
+		/>
 		<script type="text/javascript">
 			getValue()
 			// Update hidden input when radio changes
@@ -126,24 +109,26 @@
 						})
 					})
 			}
-
 			//always subscribe to ready event and implement widget related code
 			//inside callback function , it is the best practice while developing widgets
 			JFCustomWidget.subscribe('ready', function () {
-				var options = JFCustomWidget.getWidgetSetting('options').split('\n')
+				var options
+				if (JFCustomWidget.getWidgetSetting('options'))
+					options = JFCustomWidget.getWidgetSetting('options').split('\n')
 				var color = JFCustomWidget.getWidgetSetting('color')
 				var defaultValue = JFCustomWidget.getWidgetSetting('defaultValue')
 
-				document.documentElement.style.setProperty('--main-color', color)
+				if (color != '')
+					document.documentElement.style.setProperty('--main-color', color)
 
-				const btn = document.getElementById('buttonContainer')
-				console.log(btn)
-				btn.innerHTML = ''
-				var checked = ''
-				options.forEach((option) => {
-					if (defaultValue == option) checked = 'checked'
-					else checked = ''
-					btn.innerHTML += `<input
+				if (options) {
+					const btn = document.getElementById('buttonContainer')
+					btn.innerHTML = ''
+					var checked = ''
+					options.forEach((option) => {
+						if (defaultValue == option) checked = 'checked'
+						else checked = ''
+						btn.innerHTML += `<input
 						type="radio"
 						name="toggleGroup"
 						id="${option}"
@@ -151,7 +136,8 @@
 						class="toggle-segment"
 						${checked}/>
 						<label for="${option}">${option}</label>`
-				})
+					})
+				}
 
 				//subscribe to form submit event
 				JFCustomWidget.subscribe('submit', function () {
