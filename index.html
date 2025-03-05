@@ -1,167 +1,222 @@
-<style>
-:root {
-  --main-color: #4CAF50;
-  --border-radius: 8px;
-}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<style>
+			:root {
+				--main-color: #4caf50;
+				--border-radius: 8px;
+			}
 
-.toggle-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  width: 100%;
-  border: 2px solid #ddd;
-  border-radius: var(--border-radius);
-  background: #ddd;
-  overflow: hidden;
-}
+			.toggle-wrapper {
+				display: flex;
+				flex-direction: column;
+				gap: 2px;
+				width: 100%;
+				border: 2px solid #ddd;
+				border-radius: var(--border-radius);
+				background: #ddd;
+				overflow: hidden;
+			}
 
-.toggle-segment {
-  flex: 1;
-  position: relative;
-}
+			.toggle-segment {
+				flex: 1;
+				position: relative;
+			}
 
-.toggle-segment input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+			.toggle-segment input {
+				position: absolute;
+				opacity: 0;
+				width: 0;
+				height: 0;
+			}
 
-.toggle-segment label {
-  display: block;
-  padding: 15px 20px;
-  background: #f8f8f8;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: #666;
-  font-family: Arial, sans-serif;
-  font-weight: bold;
-  text-align: center;
-  border: 2px solid transparent;
-}
+			.toggle-segment label {
+				display: block;
+				padding: 15px 20px;
+				background: #f8f8f8;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				color: #666;
+				font-family: Arial, sans-serif;
+				font-weight: bold;
+				text-align: center;
+				border: 2px solid transparent;
+			}
 
-.toggle-segment input:checked + label {
-  background: var(--main-color);
-  color: white;
-  border-color: var(--main-color);
-  z-index: 2;
-}
+			.toggle-segment input:checked + label {
+				background: var(--main-color);
+				color: white;
+				border-color: var(--main-color);
+				z-index: 2;
+			}
 
-@media (min-width: 768px) {
-  .toggle-wrapper {
-    flex-direction: row;
-    gap: 0;
-  }
-  
-  .toggle-segment label {
-    border-radius: 0;
-    border-right: 2px solid #ddd;
-  }
-  
-  .toggle-segment:first-child label {
-    border-radius: var(--border-radius) 0 0 var(--border-radius);
-  }
-  
-  .toggle-segment:last-child label {
-    border-radius: 0 var(--border-radius) var(--border-radius) 0;
-    border-right: none;
-  }
-}
+			/* Desktop Horizontal Layout */
+			@media (min-width: 768px) {
+				.toggle-wrapper {
+					flex-direction: row;
+					gap: 0;
+				}
 
-@media (max-width: 767px) {
-  .toggle-segment label {
-    border-bottom: 2px solid #ddd;
-  }
-  
-  .toggle-segment:last-child label {
-    border-bottom: none;
-  }
-}
-</style>
+				.toggle-segment label {
+					border-radius: 0;
+					border-right: 2px solid #ddd;
+				}
 
-<div class="toggle-wrapper" id="buttonContainer">
-  <!-- Default options will be replaced by JavaScript -->
-</div>
-<input type="hidden" id="selectedValue" name="selectedValue">
+				.toggle-segment:first-child label {
+					border-radius: var(--border-radius) 0 0 var(--border-radius);
+				}
 
-<script>
-// Default Configuration
-const defaultConfig = {
-  options: ["For rent", "For sale", "Direct color"],
-  mainColor: "#4CAF50"
-};
+				.toggle-segment:last-child label {
+					border-radius: 0 var(--border-radius) var(--border-radius) 0;
+					border-right: none;
+				}
+			}
 
-// JotForm Widget Settings
-JotForm.setWidgetSettings([
-  {
-    type: 'text',
-    name: 'options',
-    label: 'Options (comma separated)',
-    value: defaultConfig.options.join(', ')
-  },
-  {
-    type: 'color',
-    name: 'mainColor',
-    label: 'Main Color',
-    value: defaultConfig.mainColor
-  }
-]);
+			/* Mobile Vertical Layout */
+			@media (max-width: 767px) {
+				.toggle-segment label {
+					border-bottom: 2px solid #ddd;
+				}
 
-function updateDesign(settings) {
-  // Parse settings
-  const options = (settings.options || defaultConfig.options.join(', '))
-    .split(',')
-    .map(o => o.trim())
-    .filter(o => o.length > 0);
-  
-  const mainColor = settings.mainColor || defaultConfig.mainColor;
-  
-  // Update CSS Variables
-  document.documentElement.style.setProperty('--main-color', mainColor);
-  
-  // Generate HTML
-  const container = document.getElementById('buttonContainer');
-  container.innerHTML = options.map((text, index) => `
-    <div class="toggle-segment">
-      <input type="radio" name="toggleGroup" id="option${index}" 
-             value="${text.toLowerCase().replace(/ /g, '_')}" 
-             ${index === 0 ? 'checked' : ''}>
-      <label for="option${index}">${text}</label>
-    </div>
-  `).join('');
-  
-  // Update Hidden Input
-  const firstValue = options[0]?.toLowerCase().replace(/ /g, '_') || '';
-  document.getElementById('selectedValue').value = firstValue;
-}
+				.toggle-segment:last-child label {
+					border-bottom: none;
+				}
+			}
+		</style>
 
-// Initialize Widget
-window.JotForm && JotForm.initializeWidget({
-  widgetId: 'unifiedToggleButtonFixed',
-  init: function(settings) {
-    updateDesign(settings || defaultConfig);
-  },
-  bind: function() {
-    const fieldId = this.getFormFieldId();
-    document.getElementById('selectedValue').name = fieldId;
-  },
-  clear: function() {
-    const container = document.getElementById('buttonContainer');
-    const firstInput = container.querySelector('input[type="radio"]');
-    if(firstInput) {
-      firstInput.checked = true;
-      document.getElementById('selectedValue').value = firstInput.value;
-    }
-  },
-  settingsUpdated: function(newSettings) {
-    updateDesign(newSettings);
-  }
-});
+		<div class="toggle-wrapper" id="buttonContainer">
+			<div class="toggle-segment">
+				<input
+					type="radio"
+					name="toggleGroup"
+					id="option1"
+					value="for_rent"
+					checked
+				/>
+				<label for="option1">For rent</label>
+			</div>
+			<div class="toggle-segment">
+				<input
+					type="radio"
+					name="toggleGroup"
+					id="option2"
+					value="for_sale"
+				/>
+				<label for="option2">For sale</label>
+			</div>
+			<div class="toggle-segment">
+				<input
+					type="radio"
+					name="toggleGroup"
+					id="option3"
+					value="direct_color"
+				/>
+				<label for="option3">Direct color</label>
+			</div>
+		</div>
+		<input
+			type="hidden"
+			id="selectedValue"
+			name="selectedValue"
+			value="for_rent"
+		/>
 
-// Event Delegation for Dynamic Elements
-document.addEventListener('change', (e) => {
-  if(e.target.matches('input[name="toggleGroup"]')) {
-    document.getElementById('selectedValue').value = e.target.value;
-  }
-});
-</script>
+		<script>
+			// Default Configuration
+			const defaultConfig = {
+				options: ['For rent', 'For sale', 'Direct color'],
+				mainColor: '#4CAF50',
+			}
+
+			// JotForm Widget Settings
+			JotForm.setWidgetSettings([
+				{
+					type: 'text',
+					name: 'options',
+					label: 'Options (comma separated)',
+					value: defaultConfig.options.join(', '),
+				},
+				{
+					type: 'color',
+					name: 'mainColor',
+					label: 'Main Color',
+					value: defaultConfig.mainColor,
+				},
+			])
+
+			function updateDesign(settings) {
+				const options = settings.options.split(',').map((o) => o.trim())
+				const container = document.getElementById('buttonContainer')
+
+				// Update CSS Variables
+				document.documentElement.style.setProperty(
+					'--main-color',
+					settings.mainColor
+				)
+
+				// Generate New Segments
+				container.innerHTML = options
+					.map(
+						(text, index) => `
+			 <div class="toggle-segment">
+				<input type="radio" name="toggleGroup" id="option${index + 1}" 
+						 value="${text.toLowerCase().replace(/ /g, '_')}" ${
+							index === 0 ? 'checked' : ''
+						}>
+				<label for="option${index + 1}">${text}</label>
+			 </div>
+		  `
+					)
+					.join('')
+
+				// Update Hidden Input
+				document.getElementById('selectedValue').value = options[0]
+					.toLowerCase()
+					.replace(/ /g, '_')
+			}
+
+			// Initialize Widget
+			window.JotForm &&
+				JotForm.initializeWidget({
+					widgetId: 'unifiedToggleButton',
+					init: function (settings) {
+						const finalSettings = {
+							options:
+								settings?.options || defaultConfig.options.join(', '),
+							mainColor: settings?.mainColor || defaultConfig.mainColor,
+						}
+						updateDesign(finalSettings)
+					},
+					bind: function () {
+						const fieldId = this.getFormFieldId()
+						document.getElementById('selectedValue').name = fieldId
+					},
+					clear: function () {
+						const firstInput = document.querySelector(
+							'input[type="radio"]'
+						)
+						if (firstInput) {
+							firstInput.checked = true
+							document.getElementById('selectedValue').value =
+								firstInput.value
+						}
+					},
+					settingsUpdated: function (newSettings) {
+						updateDesign(newSettings)
+					},
+				})
+
+			// Handle Selection Changes
+			document.addEventListener('change', (e) => {
+				if (e.target.name === 'toggleGroup') {
+					document.getElementById('selectedValue').value = e.target.value
+				}
+			})
+		</script>
+	</body>
+</html>
