@@ -142,12 +142,13 @@
 
 				//subscribe to form submit event
 				JFCustomWidget.subscribe('submit', function () {
-					console.log(getValue())
+					var finalValue = getValue()
+					console.log(finalValue)
 					var msg = {
 						//you should valid attribute to data for JotForm
 						//to be able to use youw widget as required
 						valid: true,
-						value: getValue(),
+						value: finalValue,
 					}
 					// send value to JotForm
 					JFCustomWidget.sendSubmit(msg)
