@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
-	</head>
-	<body>
-		<style>
+<style>
 :root {
   --main-color: #4CAF50;
   --border-radius: 8px;
@@ -55,8 +47,7 @@
   z-index: 2;
 }
 
-/* Desktop Horizontal Layout */
-@media (min-width: 450px) {
+@media (min-width: 768px) {
   .toggle-wrapper {
     flex-direction: row;
     gap: 0;
@@ -77,8 +68,7 @@
   }
 }
 
-/* Mobile Vertical Layout */
-@media (max-width: 450px) {
+@media (max-width: 767px) {
   .toggle-segment label {
     border-bottom: 2px solid #ddd;
   }
@@ -90,25 +80,14 @@
 </style>
 
 <div class="toggle-wrapper" id="buttonContainer">
-  <div class="toggle-segment">
-    <input type="radio" name="toggleGroup" id="option1" value="for_rent" checked>
-    <label for="option1">For rent</label>
-  </div>
-  <div class="toggle-segment">
-    <input type="radio" name="toggleGroup" id="option2" value="for_sale">
-    <label for="option2">For sale</label>
-  </div>
-  <div class="toggle-segment">
-    <input type="radio" name="toggleGroup" id="option3" value="direct_color">
-    <label for="option3">Direct color</label>
-  </div>
+  <!-- Default options will be replaced by JavaScript -->
 </div>
-<input type="hidden" id="selectedValue" name="selectedValue" value="for_rent">
+<input type="hidden" id="selectedValue" name="selectedValue">
 
 <script>
 // Default Configuration
 const defaultConfig = {
-  options: ["Option 1", "Option 2", "Option 3"],
+  options: ["For rent", "For sale", "Direct color"],
   mainColor: "#4CAF50"
 };
 
@@ -129,41 +108,46 @@ JotForm.setWidgetSettings([
 ]);
 
 function updateDesign(settings) {
-  const options = settings.options.split(',').map(o => o.trim());
-  const container = document.getElementById('buttonContainer');
+  // Parse settings
+  const options = (settings.options || defaultConfig.options.join(', '))
+    .split(',')
+    .map(o => o.trim())
+    .filter(o => o.length > 0);
+  
+  const mainColor = settings.mainColor || defaultConfig.mainColor;
   
   // Update CSS Variables
-  document.documentElement.style.setProperty('--main-color', settings.mainColor);
+  document.documentElement.style.setProperty('--main-color', mainColor);
   
-  // Generate New Segments
+  // Generate HTML
+  const container = document.getElementById('buttonContainer');
   container.innerHTML = options.map((text, index) => `
     <div class="toggle-segment">
-      <input type="radio" name="toggleGroup" id="option${index + 1}" 
-             value="${text.toLowerCase().replace(/ /g, '_')}" ${index === 0 ? 'checked' : ''}>
-      <label for="option${index + 1}">${text}</label>
+      <input type="radio" name="toggleGroup" id="option${index}" 
+             value="${text.toLowerCase().replace(/ /g, '_')}" 
+             ${index === 0 ? 'checked' : ''}>
+      <label for="option${index}">${text}</label>
     </div>
   `).join('');
   
   // Update Hidden Input
-  document.getElementById('selectedValue').value = options[0].toLowerCase().replace(/ /g, '_');
+  const firstValue = options[0]?.toLowerCase().replace(/ /g, '_') || '';
+  document.getElementById('selectedValue').value = firstValue;
 }
 
 // Initialize Widget
 window.JotForm && JotForm.initializeWidget({
-  widgetId: 'unifiedToggleButton',
+  widgetId: 'unifiedToggleButtonFixed',
   init: function(settings) {
-    const finalSettings = {
-      options: settings?.options || defaultConfig.options.join(', '),
-      mainColor: settings?.mainColor || defaultConfig.mainColor
-    };
-    updateDesign(finalSettings);
+    updateDesign(settings || defaultConfig);
   },
   bind: function() {
     const fieldId = this.getFormFieldId();
     document.getElementById('selectedValue').name = fieldId;
   },
   clear: function() {
-    const firstInput = document.querySelector('input[type="radio"]');
+    const container = document.getElementById('buttonContainer');
+    const firstInput = container.querySelector('input[type="radio"]');
     if(firstInput) {
       firstInput.checked = true;
       document.getElementById('selectedValue').value = firstInput.value;
@@ -174,12 +158,10 @@ window.JotForm && JotForm.initializeWidget({
   }
 });
 
-// Handle Selection Changes
+// Event Delegation for Dynamic Elements
 document.addEventListener('change', (e) => {
-  if(e.target.name === 'toggleGroup') {
+  if(e.target.matches('input[name="toggleGroup"]')) {
     document.getElementById('selectedValue').value = e.target.value;
   }
 });
 </script>
-	</body>
-</html>
