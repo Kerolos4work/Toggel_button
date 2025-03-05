@@ -63,29 +63,25 @@
 				cursor: pointer;
 				background-color: #fff;
 				color: #737373;
-				padding: 8px 16px;
+				padding: 16px 16px;
 				flex-grow: 1;
 				place-content: center;
 			}
 			input[type='radio']:checked + label {
-				background-color: hsl(from var(--main-color) h s 95%);
-				border: solid 1px var(--main-color)!important;
+				background-color: hsl(from var(--main-color) h s 93%);
+				border: solid 1px var(--main-color);
+				border-color: var(--main-color) !important;
 				color: var(--main-color);
-				font-weight: bold;
+				font-weight: 900;
 			}
 		</style>
 		<div class="toggle-wrapper" id="buttonContainer">
-			<input type="radio" name="toggleGroup" id="option1" value="for_rent" />
-			<label for="option1">1</label>
-			<input type="radio" name="toggleGroup" id="option2" value="for_sale" />
-			<label for="option2">2</label>
-			<input
-				type="radio"
-				name="toggleGroup"
-				id="option3"
-				value="direct_color"
-			/>
-			<label for="option3">3</label>
+			<input type="radio" name="toggleGroup" id="option1" value="1" />
+			<label for="option1">Option 1</label>
+			<input type="radio" name="toggleGroup" id="option2" value="2" />
+			<label for="option2">Option 2</label>
+			<input type="radio" name="toggleGroup" id="option3" value="3" />
+			<label for="option3">Option 3</label>
 		</div>
 		<input
 			type="hidden"
