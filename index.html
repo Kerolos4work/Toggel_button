@@ -94,10 +94,7 @@
 					id="option2"
 					value="for_sale"
 				/>
-				<label for="option2"
-					>Optionghghghghg fdgh jfgh kjfdhg kljfhdg kljfd hgkljfh g
-					klfjhklgjfh gkjfdgh lkhghghgh gfhg hgf hfg 2</label
-				>
+				<label for="option2">Option 2</label>
 				<input
 					type="radio"
 					name="toggleGroup"
@@ -133,12 +130,9 @@
 			//always subscribe to ready event and implement widget related code
 			//inside callback function , it is the best practice while developing widgets
 			JFCustomWidget.subscribe('ready', function () {
-				var label = JFCustomWidget.getWidgetSetting('QuestionLabel')
-				var color = JFCustomWidget.getWidgetSetting('color')
 				var options = JFCustomWidget.getWidgetSetting('options').split('\n')
+				var color = JFCustomWidget.getWidgetSetting('color')
 				var defaultValue = JFCustomWidget.getWidgetSetting('defaultValue')
-
-				document.getElementById('labelText').innerHTML = label
 
 				document.documentElement.style.setProperty('--main-color', color)
 
